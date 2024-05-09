@@ -1,12 +1,33 @@
 
-import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class listagemVIEW extends javax.swing.JFrame {
 
     public listagemVIEW() {
         initComponents();
-//        listarProdutos();
+        listaProdutos.setModel(listarProdutos());
+        setLocationRelativeTo(null);
+    }
+
+    private DefaultTableModel listarProdutos() {
+        final String[] columns = {"id", "nome", "valor", "status"};
+        DefaultTableModel modelo = new DefaultTableModel(columns, 0);
+        try {
+            List<ProdutosDTO> lista = ProdutosDAO.listagem();
+            for (ProdutosDTO p : lista) {
+                Object[] dataRow = {
+                    p.getNome(),
+                    p.getValor(),
+                    p.getStatus()
+                };
+                modelo.addRow(dataRow);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível carregar os items da tabela.", "Erro", 0);
+        }
+        return modelo;
     }
 
     @SuppressWarnings("unchecked")
@@ -24,7 +45,7 @@ public class listagemVIEW extends javax.swing.JFrame {
         btnVendas = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         listaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -120,16 +141,15 @@ public class listagemVIEW extends javax.swing.JFrame {
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
-        
-        ProdutosDAO produtosdao = new ProdutosDAO();
-        
+
+        //  ProdutosDAO produtosdao = new ProdutosDAO();
         //produtosdao.venderProduto(Integer.parseInt(id));
 //        listarProdutos();
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        //vendasVIEW vendas = new vendasVIEW(); 
-        //vendas.setVisible(true);
+        // vendasVIEW vendas = new vendasVIEW(); 
+        // vendas.setVisible(true);
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -147,13 +167,15 @@ public class listagemVIEW extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(listagemVIEW.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(listagemVIEW.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -175,25 +197,4 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-//    private void listarProdutos(){
-//        try {
-//            ProdutosDAO produtosdao = new ProdutosDAO();
-//            
-//            DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
-//            model.setNumRows(0);
-//            
-//            // ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
-            
-//            for(int i = 0; i < listagem.size(); i++){
-//                model.addRow(new Object[]{
-//                    listagem.get(i).getId(),
-//                    listagem.get(i).getNome(),
-//                    listagem.get(i).getValor(),
-//                    listagem.get(i).getStatus()
-//                });
-//            }
-//        } catch (Exception e) {
-//        }
-//    
-    // }
 }
