@@ -18,6 +18,7 @@ public class listagemVIEW extends javax.swing.JFrame {
             List<ProdutosDTO> lista = ProdutosDAO.listagem();
             for (ProdutosDTO p : lista) {
                 Object[] dataRow = {
+                    p.getId(),
                     p.getNome(),
                     p.getValor(),
                     p.getStatus()
@@ -28,6 +29,9 @@ public class listagemVIEW extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Não foi possível carregar os items da tabela.", "Erro", 0);
         }
         return modelo;
+    }
+    public final void refreshFrame() {
+        listaProdutos.setModel(listarProdutos());
     }
 
     @SuppressWarnings("unchecked")
@@ -142,9 +146,15 @@ public class listagemVIEW extends javax.swing.JFrame {
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String id = id_produto_venda.getText();
 
-        //  ProdutosDAO produtosdao = new ProdutosDAO();
-        //produtosdao.venderProduto(Integer.parseInt(id));
-//        listarProdutos();
+        if (ProdutosDAO.venderProduto(Integer.parseInt(id))) {
+            id_produto_venda.setText("");
+            id_produto_venda.requestFocus();
+            refreshFrame();
+        } else {
+            JOptionPane.showMessageDialog(null, "Produto já foi vendido.", "Erro", 0);
+            id_produto_venda.setText("");
+            id_produto_venda.requestFocus();
+        }
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
